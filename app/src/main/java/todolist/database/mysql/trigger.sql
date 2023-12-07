@@ -21,5 +21,6 @@ delimiter ;
         
 -- DELETE FROM User WHERE user_id = 1;
 -- DELETE FROM Token WHERE token_id = 2;
+-- SELECT * FROM User WHERE email = "newemail@example.com" AND password = "123456789";
 -- SELECT * FROM User;
 -- SELECT * FROM Token;

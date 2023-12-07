@@ -10,6 +10,7 @@ public interface DataInterface {
     public String createUser(User user);
     public int getUser(String email, String password);
     public Token getUserToken(int user);
-    public String createUserToken(LocalDateTime now, int user);
+    public String createUserToken(Token token);
     public String deleteUserToken(int user);
+    public String updateUserToken(Token token);
 }

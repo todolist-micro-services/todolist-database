@@ -64,43 +64,101 @@ public class Mysql implements DataInterface {
 
 
     @Override
-    public String createUser(User test) {
-        List<Map<String, String>> data = new ArrayList<>();
+    public String createUser(User user) {
         String result = new String();
+
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            // data = this.select(connection, SqlOperation.RETRIEVE_USER.getSqlTemplate(), Arrays.asList());
-            result = this.insert(connection, SqlOperation.CREATE_USER.getSqlTemplate(), Arrays.asList("P", "P", "P2", "P"));
+            result = this.insert(connection, SqlOperation.CREATE_USER.getSqlTemplate(), Arrays.asList(user.firstname, user.lastname, user.email, user.password));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return e.getMessage();
         }
-        if (data.size() == 1 && data.get(0).containsKey("Error")) {
-            return data.get(0).get("Error");
-        }
-        System.out.println(data);
         return result;
     }
 
     @Override
     public int getUser(String email, String password) {
-        return 0;
+        List<Map<String, String>> data = new ArrayList<>();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            data = this.select(connection, SqlOperation.RETRIEVE_USER.getSqlTemplate(), Arrays.asList(email, password));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -2;
+        }
+        if ((data.size() == 1 && data.get(0).containsKey("Error")) || data.isEmpty()) {
+            return -1;
+        }
+        return Integer.parseInt(data.get(0).get("user_id"));
     }
 
     @Override
     public Token getUserToken(int user) {
-        return null;
+        List<Map<String, String>> data = new ArrayList<>();
+        Token token = null;
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            data = this.select(connection, SqlOperation.RETRIEVE_USER_TOKEN.getSqlTemplate(), Arrays.asList(user));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if ((data.size() == 1 && data.get(0).containsKey("Error")) || data.isEmpty()) {
+            return null;
+        }
+        token = new Token(Integer.parseInt(data.get(0).get("token_id")), Integer.parseInt(data.get(0).get("user")), data.get(0).get("jwt_value"), LocalDateTime.parse(data.get(0).get("expiration_date").replace(" ", "T")));
+        return token;
     }
 
     @Override
-    public String createUserToken(LocalDateTime now, int user) {
-        return "";
+    public String createUserToken(Token token) {
+        String result = new String();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            result = this.insert(connection, SqlOperation.CREATE_USER_TOKEN.getSqlTemplate(), Arrays.asList(token.jwtValue, token.expirationDate.toString(), token.user));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        return result;
     }
 
     @Override
     public String deleteUserToken(int user) {
-        return "";
+        String result = new String();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            result = this.insert(connection, SqlOperation.DELETE_USER_TOKEN.getSqlTemplate(), Arrays.asList(user));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        return result;
+    }
+
+    @Override
+    public String updateUserToken(Token token) {
+        String result = new String();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            result = this.insert(connection, SqlOperation.UPDATE_USER_TOKEN.getSqlTemplate(), Arrays.asList(token.jwtValue, token.expirationDate.toString(), token.tokenId));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        return result;
     }
 
     private final String databaseUrl;
