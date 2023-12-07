@@ -8,7 +8,11 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    `maven-publish`
 }
+
+group = "todolist.database"
+version = "1.0-SNAPSHOT"
 
 repositories {
     // Use Maven Central for resolving dependencies.
