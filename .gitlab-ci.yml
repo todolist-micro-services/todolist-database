@@ -5,5 +5,5 @@ ci:
         ref: 'master'
         file: 'server/ci.yml'
     strategy: depend
-#  rules:
-#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
