@@ -4,10 +4,9 @@ import todolist.database.DataInterface;
 import todolist.database.dataType.Token;
 import todolist.database.dataType.User;
 
+import java.sql.*;
 import java.time.LocalDateTime;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.util.*;
 
 public class Mysql implements DataInterface {
 
@@ -17,21 +16,71 @@ public class Mysql implements DataInterface {
         this.databasePassword = databasePassword;
     }
 
+    private List<Map<String, String>> select(Connection connection, String sql, List<Object> params) {
+        List<Map<String, String>> resultList = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            for (int i = 0; i < params.size(); i++) {
+                preparedStatement.setObject(i + 1, params.get(i));
+            }
+            try (ResultSet res = preparedStatement.executeQuery()) {
+                while (!res.isClosed() && res.next()) {
+                    ResultSetMetaData name = res.getMetaData();
+                    Map<String, String> columnValuesMap = new HashMap<>();
+                    for (int i = 1; i <= name.getColumnCount(); ++i) {
+                        columnValuesMap.put(name.getColumnName(i), res.getString(name.getColumnName(i)));
+                    }
+                    resultList.add(columnValuesMap);
+                }
+            } catch (SQLException e) {
+                Map<String, String> errorData = new HashMap<>();
+                errorData.put("Error", e.getMessage());
+                resultList.clear();
+                resultList.add(errorData);
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            Map<String, String> errorData = new HashMap<>();
+            errorData.put("Error", e.getMessage());
+            resultList.clear();
+            resultList.add(errorData);
+            e.printStackTrace();
+        }
+        return resultList;
+    }
+
+    private String insert(Connection connection, String sql, List<Object> params) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            for (int i = 0; i < params.size(); i++) {
+                preparedStatement.setObject(i + 1, params.get(i));
+            }
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        return "";
+    }
+
+
     @Override
-    public boolean createUser(User test) {
-        System.out.println("Create User");
+    public String createUser(User test) {
+        List<Map<String, String>> data = new ArrayList<>();
+        String result = new String();
         try {
-            // Establish a connection
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-
-            // Perform database operations here
-
-            // Close the connection when done
+            // data = this.select(connection, SqlOperation.RETRIEVE_USER.getSqlTemplate(), Arrays.asList());
+            result = this.insert(connection, SqlOperation.CREATE_USER.getSqlTemplate(), Arrays.asList("P", "P", "P2", "P"));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            return e.getMessage();
         }
-        return false;
+        if (data.size() == 1 && data.get(0).containsKey("Error")) {
+            return data.get(0).get("Error");
+        }
+        System.out.println(data);
+        return result;
     }
 
     @Override
@@ -45,13 +94,13 @@ public class Mysql implements DataInterface {
     }
 
     @Override
-    public boolean createUserToken(LocalDateTime now, int user) {
-        return false;
+    public String createUserToken(LocalDateTime now, int user) {
+        return "";
     }
 
     @Override
-    public boolean deleteUserToken(int user) {
-        return false;
+    public String deleteUserToken(int user) {
+        return "";
     }
 
     private final String databaseUrl;

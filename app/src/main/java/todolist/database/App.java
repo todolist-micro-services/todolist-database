@@ -31,6 +31,6 @@ public class App {
         }
         DataInterface dataInterface = new Mysql(System.getProperty("DATABASE_URL"), System.getProperty("DATABASE_USER"), System.getProperty("DATABASE_PASSWORD"));
 
-        dataInterface.createUser(new User(1, "", "", "", ""));
+        System.out.println(dataInterface.createUser(new User(1, "", "", "", "")));
     }
 }
