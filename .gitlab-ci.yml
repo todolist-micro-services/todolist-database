@@ -1,9 +1,15 @@
-ci:
-  trigger:
-    include:
-      - project: 'todolist-micro-services/pipeline'
-        ref: 'master'
-        file: 'server/ci.yml'
-    strategy: depend
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+stages:
+  - build
+  - test
+
+build-job:
+  stage: build
+  image: gradle:8.5.0-jdk21-alpine
+  script:
+    - ./gradlew build --info
+
+unit-test-job:
+  stage: test
+  image: gradle:8.5.0-jdk21-alpine
+  script:
+    - ./gradlew test --info
