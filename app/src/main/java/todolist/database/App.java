@@ -35,9 +35,9 @@ public class App {
 
         // System.out.println(dataInterface.createUser(new User(1, "", "", "", "")));
         // System.out.println(dataInterface.getUser("newemail@example.com", "newpassword"));
-        // System.out.println(dataInterface.createUserToken(new Token(0, 1, "jwtValue", LocalDateTime.now())));
-        // System.out.println(dataInterface.getUserToken(1));
+        // System.out.println(dataInterface.createUserToken(new Token(0, 1, "jwtValue", LocalDateTime.now(), false)));
+        // System.out.println(dataInterface.getUserToken(1).isActivated);
         // System.out.println(dataInterface.deleteUserToken(1));
-        // System.out.println(dataInterface.updateUserToken(new Token(3, 1, "update from java", LocalDateTime.now())));
+        // System.out.println(dataInterface.updateUserToken(new Token(1, 1, "update from java", LocalDateTime.now(), false)));
     }
 }

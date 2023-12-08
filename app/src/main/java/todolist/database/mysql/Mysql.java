@@ -112,7 +112,7 @@ public class Mysql implements DataInterface {
         if ((data.size() == 1 && data.get(0).containsKey("Error")) || data.isEmpty()) {
             return null;
         }
-        token = new Token(Integer.parseInt(data.get(0).get("token_id")), Integer.parseInt(data.get(0).get("user")), data.get(0).get("jwt_value"), LocalDateTime.parse(data.get(0).get("expiration_date").replace(" ", "T")));
+        token = new Token(Integer.parseInt(data.get(0).get("token_id")), Integer.parseInt(data.get(0).get("user")), data.get(0).get("jwt_value"), LocalDateTime.parse(data.get(0).get("expiration_date").replace(" ", "T")), Integer.parseInt(data.get(0).get("token_id")) == 0);
         return token;
     }
 
@@ -122,7 +122,7 @@ public class Mysql implements DataInterface {
 
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.insert(connection, SqlOperation.CREATE_USER_TOKEN.getSqlTemplate(), Arrays.asList(token.jwtValue, token.expirationDate.toString(), token.user));
+            result = this.insert(connection, SqlOperation.CREATE_USER_TOKEN.getSqlTemplate(), Arrays.asList(token.jwtValue, token.expirationDate.toString(), token.user, token.isActivated));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -152,7 +152,7 @@ public class Mysql implements DataInterface {
 
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.insert(connection, SqlOperation.UPDATE_USER_TOKEN.getSqlTemplate(), Arrays.asList(token.jwtValue, token.expirationDate.toString(), token.tokenId));
+            result = this.insert(connection, SqlOperation.UPDATE_USER_TOKEN.getSqlTemplate(), Arrays.asList(token.jwtValue, token.expirationDate.toString(), token.isActivated, token.tokenId));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
