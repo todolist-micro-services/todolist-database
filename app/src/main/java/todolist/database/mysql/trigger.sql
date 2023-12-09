@@ -18,9 +18,13 @@ delimiter ;
 -- INSERT INTO Token (jwt_value, expiration_date, user)
 -- VALUES ("token value 1", "1998-01-23 12:45:56", 1),
 -- 		("token value 2", "1998-01-23 12:45:56", 2);
+
+-- UPDATE Token SET jwt_value = "", expiration_date = "1998-01-23 12:45:56" WHERE token_id = 3;
         
 -- DELETE FROM User WHERE user_id = 1;
 -- DELETE FROM Token WHERE token_id = 2;
 -- SELECT * FROM User WHERE email = "newemail@example.com" AND password = "123456789";
--- SELECT * FROM User;
--- SELECT * FROM Token;
+DELETE FROM User WHERE user_id = 9;
+SELECT * FROM User;
+SELECT * FROM Token;
+
