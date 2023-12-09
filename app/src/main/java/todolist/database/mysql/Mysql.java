@@ -112,7 +112,7 @@ public class Mysql implements DataInterface {
         if ((data.size() == 1 && data.get(0).containsKey("Error")) || data.isEmpty()) {
             return null;
         }
-        token = new Token(Integer.parseInt(data.get(0).get("token_id")), Integer.parseInt(data.get(0).get("user")), data.get(0).get("jwt_value"), LocalDateTime.parse(data.get(0).get("expiration_date").replace(" ", "T")), Integer.parseInt(data.get(0).get("token_id")) != 0);
+        token = new Token(Integer.parseInt(data.get(0).get("token_id")), Integer.parseInt(data.get(0).get("user")), data.get(0).get("jwt_value"), LocalDateTime.parse(data.get(0).get("expiration_date").replace(" ", "T")), Integer.parseInt(data.get(0).get("is_activate")) != 0);
         return token;
     }
 
@@ -132,7 +132,7 @@ public class Mysql implements DataInterface {
         if ((data.size() == 1 && data.get(0).containsKey("Error")) || data.isEmpty()) {
             return null;
         }
-        token = new Token(Integer.parseInt(data.get(0).get("token_id")), Integer.parseInt(data.get(0).get("user")), data.get(0).get("jwt_value"), LocalDateTime.parse(data.get(0).get("expiration_date").replace(" ", "T")), Integer.parseInt(data.get(0).get("token_id")) != 0);
+        token = new Token(Integer.parseInt(data.get(0).get("token_id")), Integer.parseInt(data.get(0).get("user")), data.get(0).get("jwt_value"), LocalDateTime.parse(data.get(0).get("expiration_date").replace(" ", "T")), Integer.parseInt(data.get(0).get("is_activate")) != 0);
         return token;
     }
 
