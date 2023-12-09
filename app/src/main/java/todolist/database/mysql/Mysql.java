@@ -112,7 +112,27 @@ public class Mysql implements DataInterface {
         if ((data.size() == 1 && data.get(0).containsKey("Error")) || data.isEmpty()) {
             return null;
         }
-        token = new Token(Integer.parseInt(data.get(0).get("token_id")), Integer.parseInt(data.get(0).get("user")), data.get(0).get("jwt_value"), LocalDateTime.parse(data.get(0).get("expiration_date").replace(" ", "T")), Integer.parseInt(data.get(0).get("token_id")) == 0);
+        token = new Token(Integer.parseInt(data.get(0).get("token_id")), Integer.parseInt(data.get(0).get("user")), data.get(0).get("jwt_value"), LocalDateTime.parse(data.get(0).get("expiration_date").replace(" ", "T")), Integer.parseInt(data.get(0).get("token_id")) != 0);
+        return token;
+    }
+
+    @Override
+    public Token getUserTokenFromToken(String test) {
+        List<Map<String, String>> data = new ArrayList<>();
+        Token token = null;
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            data = this.select(connection, SqlOperation.RETRIEVE_USER_TOKEN_FROM_TOKEN.getSqlTemplate(), Arrays.asList(test));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if ((data.size() == 1 && data.get(0).containsKey("Error")) || data.isEmpty()) {
+            return null;
+        }
+        token = new Token(Integer.parseInt(data.get(0).get("token_id")), Integer.parseInt(data.get(0).get("user")), data.get(0).get("jwt_value"), LocalDateTime.parse(data.get(0).get("expiration_date").replace(" ", "T")), Integer.parseInt(data.get(0).get("token_id")) != 0);
         return token;
     }
 
