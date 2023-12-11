@@ -181,6 +181,49 @@ public class Mysql implements DataInterface {
         return result;
     }
 
+    public User getUserFromToken(final String jwtToken) {
+        List<Map<String, String>> data = new ArrayList<>();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            data = this.select(connection, SqlOperation.RETRIEVE_USER_FROM_TOKEN.getSqlTemplate(), Arrays.asList(jwtToken));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if ((data.size() == 1 && data.get(0).containsKey("Error")) || data.isEmpty()) {
+            return null;
+        }
+        return new User(Integer.parseInt(data.get(0).get("user_id")), data.get(0).get("firstname"), data.get(0).get("lastname"), data.get(0).get("email"), data.get(0).get("password"));
+    }
+    public String updateUser(final String jwtToken, final User user) {
+        String result = new String();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            result = this.insert(connection, SqlOperation.UPDATE_USER.getSqlTemplate(), Arrays.asList(user.firstname, user.lastname, jwtToken));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        return result;
+    }
+    public String deleteUser(final String jwtToken) {
+        String result = new String();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            result = this.insert(connection, SqlOperation.DELETE_USER.getSqlTemplate(), Arrays.asList(jwtToken));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        return result;
+    }
+
     private final String databaseUrl;
     private final String databaseUser;
     private final String databasePassword;

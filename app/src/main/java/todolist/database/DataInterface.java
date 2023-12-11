@@ -14,4 +14,7 @@ public interface DataInterface {
     public String createUserToken(Token token);
     public String deleteUserToken(int user);
     public String updateUserToken(Token token);
+    public User getUserFromToken(final String jwtToken);
+    public String updateUser(final String jwtToken, final User user);
+    public String deleteUser(final String jwtToken);
 }

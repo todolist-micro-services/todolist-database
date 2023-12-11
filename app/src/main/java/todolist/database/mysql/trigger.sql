@@ -2,16 +2,6 @@ USE todolistMicroServices;
 
 DROP TRIGGER IF EXISTS delete_user;
 
-delimiter $$
-
- CREATE TRIGGER delete_user BEFORE DELETE ON User
-	FOR EACH ROW
-	BEGIN
-		DELETE FROM Token WHERE user = OLD.user_id;
-	END $$
-
-delimiter ;
-
 -- INSERT INTO User (firstname, lastname, email, password)
 -- VALUES ("Pierre-Alexandre", "Delgado", "pdelgadoarevalo@sfsu.edu", "123456789"),
 -- 		("Pierre-Alexandre", "Delgado", "delgadopierrealexandre@gmail.com", "123456789");
@@ -25,6 +15,9 @@ delimiter ;
 -- DELETE FROM Token WHERE token_id = 2;
 -- SELECT * FROM User WHERE email = "newemail@example.com" AND password = "123456789";
 DELETE FROM User WHERE user_id = 9;
+DELETE user, token FROM Token token JOIN User user ON token.user = user.user_id WHERE token.jwt_value = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWxnYWRvcGllcnJlYWxleGFuZHJlQGdtYWlsLmNvbSIsImp0aSI6ImQ3NmI2M2I0LTE0OTAtNDAzYi1hNWY3LTc2ZTRhZjZhYmJiOSIsImlhdCI6MTcwMjE5NTEyMCwiZXhwIjoxNzAyMjgxNTIwfQ.k5wFI_8PMMSWLceRj7helf0UnUIMpZCuYNiG5Ei9NMA";
+SELECT user.user_id, user.firstname, user.lastname, user.email, user.password FROM Token token JOIN User user ON token.user = user.user_id WHERE token.jwt_value = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZWxnYWRvcGllcnJlYWxleGFuZHJlQGdtYWlsLmNvbSIsImp0aSI6ImQ3NmI2M2I0LTE0OTAtNDAzYi1hNWY3LTc2ZTRhZjZhYmJiOSIsImlhdCI6MTcwMjE5NTEyMCwiZXhwIjoxNzAyMjgxNTIwfQ.k5wFI_8PMMSWLceRj7helf0UnUIMpZCuYNiG5Ei9NMA";
 SELECT * FROM User;
 SELECT * FROM Token;
+
 
