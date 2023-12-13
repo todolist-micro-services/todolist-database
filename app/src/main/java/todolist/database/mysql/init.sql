@@ -53,6 +53,114 @@ CREATE TABLE IF NOT EXISTS `Token` (
     ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `Project`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Project` ;
+
+CREATE TABLE IF NOT EXISTS `Project` (
+    `project_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `description` VARCHAR(255) NOT NULL,
+    `creation_date` DATETIME NOT NULL,
+    `creator` INT UNSIGNED NULL,
+    PRIMARY KEY (`project_id`),
+    UNIQUE INDEX `project_id_UNIQUE` (`project_id` ASC) VISIBLE,
+    CONSTRAINT `fk_project_creator`
+    FOREIGN KEY (`creator`)
+    REFERENCES `User` (`user_id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `List`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `List` ;
+
+CREATE TABLE IF NOT EXISTS `List` (
+    `list_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `description` VARCHAR(255) NOT NULL,
+    `parent` INT UNSIGNED NULL,
+    `creator` INT UNSIGNED NULL,
+    `project` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`list_id`),
+    UNIQUE INDEX `list_id_UNIQUE` (`list_id` ASC) VISIBLE,
+    CONSTRAINT `fk_list_creator`
+    FOREIGN KEY (`creator`)
+    REFERENCES `User` (`user_id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_list_parent`
+    FOREIGN KEY (`parent`)
+    REFERENCES `List` (`list_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_list_project`
+    FOREIGN KEY (`project`)
+    REFERENCES `Project` (`project_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Event`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Event` ;
+
+CREATE TABLE IF NOT EXISTS `Event` (
+    `event_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `description` VARCHAR(255) NOT NULL,
+    `start_date` DATETIME NOT NULL,
+    `end_date` DATETIME NOT NULL,
+    `creator` INT UNSIGNED NULL,
+    `project` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`event_id`),
+    UNIQUE INDEX `event_id_UNIQUE` (`event_id` ASC) VISIBLE,
+    CONSTRAINT `fk_event_creator`
+    FOREIGN KEY (`creator`)
+    REFERENCES `User` (`user_id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_event_project`
+    FOREIGN KEY (`project`)
+    REFERENCES `Project` (`project_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Task`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Task` ;
+
+CREATE TABLE IF NOT EXISTS `Task` (
+    `task_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
+    `creation_date` DATETIME NOT NULL,
+    `creator` INT UNSIGNED NULL,
+    `list` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`task_id`),
+    UNIQUE INDEX `task_id_UNIQUE` (`task_id` ASC) VISIBLE,
+    CONSTRAINT `fk_task_creator`
+    FOREIGN KEY (`creator`)
+    REFERENCES `User` (`user_id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_task_list`
+    FOREIGN KEY (`list`)
+    REFERENCES `List` (`list_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
