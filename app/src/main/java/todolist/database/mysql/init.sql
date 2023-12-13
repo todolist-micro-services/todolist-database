@@ -161,23 +161,6 @@ CREATE TABLE IF NOT EXISTS `Task` (
     ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Trigger mydb
--- -----------------------------------------------------
-DROP TRIGGER IF EXISTS delete_project;
-
-DELIMITER $$
-
-CREATE TRIGGER delete_project_element BEFORE DELETE ON Project
-FOR EACH ROW
-BEGIN
-	DELETE FROM List WHERE List.project = OLD.project_id;
-	DELETE FROM Event WHERE Event.project = OLD.project_id;
-END $$
-
-DELIMITER ;
-
-
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
