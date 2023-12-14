@@ -3,8 +3,6 @@ package todolist.database;
 
 import todolist.database.dataType.*;
 
-import java.time.LocalDateTime;
-
 public interface DataInterface {
     public String createUser(User user);
     public int getUser(String email, String password);
@@ -45,4 +43,8 @@ public interface DataInterface {
     public String unLinkUserToList(int userId, int listId);
     public String linkUserToTask(int userId, int taskId);
     public String unLinkUserToTask(int userId, int taskId);
+    public User[] retrieveAllUserLinkToTask();
+    public User[] retrieveAllUserLinkToList();
+    public User[] retrieveAllUserLinkToEvent();
+    public User[] retrieveAllUserLinkToProject();
 }

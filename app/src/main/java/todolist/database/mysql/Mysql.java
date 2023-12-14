@@ -373,6 +373,25 @@ public class Mysql implements DataInterface {
         return "";
     }
 
+    @Override
+    public User[] retrieveAllUserLinkToTask() {
+        return new User[0];
+    }
+
+    @Override
+    public User[] retrieveAllUserLinkToList() {
+        return new User[0];
+    }
+
+    @Override
+    public User[] retrieveAllUserLinkToEvent() {
+        return new User[0];
+    }
+
+    @Override
+    public User[] retrieveAllUserLinkToProject() {
+        return new User[0];
+    }
 
     private final String databaseUrl;
     private final String databaseUser;
