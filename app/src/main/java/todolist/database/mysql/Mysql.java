@@ -1,12 +1,12 @@
 package todolist.database.mysql;
 
 import todolist.database.DataInterface;
-import todolist.database.dataType.Token;
-import todolist.database.dataType.User;
+import todolist.database.dataType.*;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
 
 public class Mysql implements DataInterface {
 
@@ -181,6 +181,7 @@ public class Mysql implements DataInterface {
         return result;
     }
 
+    @Override
     public User getUserFromToken(final String jwtToken) {
         List<Map<String, String>> data = new ArrayList<>();
 
@@ -197,6 +198,8 @@ public class Mysql implements DataInterface {
         }
         return new User(Integer.parseInt(data.get(0).get("user_id")), data.get(0).get("firstname"), data.get(0).get("lastname"), data.get(0).get("email"), data.get(0).get("password"));
     }
+
+    @Override
     public String updateUser(final String jwtToken, final User user) {
         String result = new String();
 
@@ -210,6 +213,8 @@ public class Mysql implements DataInterface {
         }
         return result;
     }
+
+    @Override
     public String deleteUser(final String jwtToken) {
         String result = new String();
 
@@ -223,6 +228,151 @@ public class Mysql implements DataInterface {
         }
         return result;
     }
+
+    @Override
+    public String createProject(Project project) {
+        return "";
+    }
+    @Override
+    public String updateProject(Project project) {
+        return "";
+    }
+
+    @Override
+    public String deleteProject(int projectId) {
+        return "";
+    }
+
+    @Override
+    public Project[] retrieveAllUserProjects(int userId) {
+        return new Project[0];
+    }
+
+    @Override
+    public Project retrieveOneUserProject(int userId, int projectId) {
+        return new Project(0, "", "", LocalDateTime.now(), null);
+    }
+
+    @Override
+    public String createProjectEvent(Event event) {
+        return "";
+    }
+
+    @Override
+    public String updateProjectEvent(Event event) {
+        return "";
+    }
+
+    @Override
+    public String deleteProjectEvent(int eventId) {
+        return "";
+    }
+
+    @Override
+    public Event retrieveOneProjectEvent(int projectId, int eventId) {
+        return new Event(0, "", "", LocalDateTime.now(), LocalDateTime.now(), null, null);
+    }
+    @Override
+
+    public Event[] retrieveAllProjectEvents(int projectId) {
+        return new Event[0];
+    }
+
+    @Override
+    public String createProjectList() {
+        return "";
+    }
+
+    @Override
+    public String updateProjectList() {
+        return "";
+    }
+
+    @Override
+    public String deleteProjectList() {
+        return "";
+    }
+
+    @Override
+    public todolist.database.dataType.List retrieveOneProjectList(int projectId, int listId) {
+        return new todolist.database.dataType.List(0, "", "", null, null, null);
+    }
+
+    @Override
+    public todolist.database.dataType.List[] allProjectLists(int projectId) {
+        return new todolist.database.dataType.List[0];
+    }
+
+    @Override
+    public String createListTask(Task task) {
+        return "";
+    }
+
+    @Override
+    public String updateListTask(Task task) {
+        return "";
+    }
+
+    @Override
+    public String deleteListTask(int taskId) {
+        return "";
+    }
+
+    @Override
+    public Task getOneListTask(int listId, int taskId) {
+        return new Task(0, "", "", LocalDateTime.now(), null, null);
+    }
+
+    @Override
+    public Task[] getAllListTasks(int listId) {
+        return new Task[0];
+    }
+
+    @Override
+    public Task[] getAllProjectTasks(int projectId) {
+        return new Task[0];
+    }
+
+    @Override
+    public String linkUserToProject(int userId, int projectId) {
+        return "";
+    }
+
+    @Override
+    public String unLinkUserToProject(int userId, int projectId) {
+        return "";
+    }
+
+    @Override
+    public String linkUserToEvent(int userId, int eventId) {
+        return "";
+    }
+
+    @Override
+    public String unLinkUserToEvent(int userId, int eventId) {
+        return "";
+    }
+
+    @Override
+    public String linkUserToList(int userId, int listId) {
+        return "";
+    }
+
+    @Override
+    public String unLinkUserToList(int userId, int listId) {
+        return "";
+    }
+
+    @Override
+    public String linkUserToTask(int userId, int taskId) {
+        return "";
+    }
+
+    @Override
+    public String unLinkUserToTask(int userId, int taskId) {
+        return "";
+    }
+
 
     private final String databaseUrl;
     private final String databaseUser;
