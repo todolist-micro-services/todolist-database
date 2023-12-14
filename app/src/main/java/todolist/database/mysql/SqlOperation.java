@@ -40,7 +40,7 @@ public enum SqlOperation {
     UNLINK_USER_TO_LIST("DELETE FROM UserList WHERE user_id = ? AND list_id = ?;"),
     LINK_USER_TO_TASK("INSERT INTO UserTask (user_id, task_id) VALUES (?, ?);"),
     UNLINK_USER_TO_TASK("DELETE FROM UserProject WHERE user_id = ? AND task_id = ?;"),
-    RETRIEVE_ALL_USER_LINK_TO_TASK("SELECT user.user_id, user.firstname, user.lastname, user.email FROM UserTask JOIN User user ON user.user_id = UserTask.user_id WHERE project_id = ?;"),
+    RETRIEVE_ALL_USER_LINK_TO_TASK("SELECT user.user_id, user.firstname, user.lastname, user.email FROM UserTask JOIN User user ON user.user_id = UserTask.user_id WHERE task_id = ?;"),
     RETRIEVE_ALL_USER_LINK_TO_LIST("SELECT user.user_id, user.firstname, user.lastname, user.email FROM UserList JOIN User user ON user.user_id = UserList.user_id WHERE list_id = ?;"),
     RETRIEVE_ALL_USER_LINK_TO_EVENT("SELECT user.user_id, user.firstname, user.lastname, user.email FROM UserEvent JOIN User user ON user.user_id = UserEvent.user_id WHERE event_id = ?;"),
     RETRIEVE_ALL_USER_LINK_TO_PROJECT("SELECT user.user_id, user.firstname, user.lastname, user.email FROM UserProject JOIN User user ON user.user_id = UserProject.user_id WHERE project_id = ?;");

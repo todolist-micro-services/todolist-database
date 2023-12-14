@@ -1,6 +1,7 @@
 package todolist.database.dataType;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class Task {
 
@@ -13,6 +14,15 @@ public class Task {
         this.creationDateTime = creationDateTime;
         this.creator = creator;
         this.list = list;
+    }
+
+    public Task(Map<String, String> data) {
+        this.taskId = Integer.parseInt(data.get("task_id"));
+        this.name = data.get("name");
+        this.description = data.get("description");
+        this.creationDateTime = LocalDateTime.parse(data.get("creation_date").replace(" ", "T"));
+        this.creator = new User(Integer.parseInt(data.get("creator")), "", "", "", "");
+        this.list = new List(Integer.parseInt(data.get("list")), "", "", null, null, null);
     }
 
     public int taskId;
