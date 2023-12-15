@@ -1,6 +1,7 @@
 package todolist.database.dataType;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class Token {
 
@@ -10,6 +11,14 @@ public class Token {
         this.jwtValue = jwtValue;
         this.expirationDate = expirationDate;
         this.isActivated = isActivated;
+    }
+
+    public Token(Map<String, String> data) {
+        this.tokenId = Integer.parseInt(data.get("token_id"));
+        this.user = Integer.parseInt(data.get("user"));
+        this.jwtValue = data.get("jwt_value");
+        this.expirationDate = LocalDateTime.parse(data.get("expiration_date").replace(" ", "T"));
+        this.isActivated = Integer.parseInt(data.get("is_activate")) != 0;
     }
 
     public int tokenId;

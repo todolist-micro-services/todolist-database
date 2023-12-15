@@ -161,6 +161,92 @@ CREATE TABLE IF NOT EXISTS `Task` (
     ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `UserProject`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `UserProject` ;
+CREATE TABLE IF NOT EXISTS `UserProject` (
+    `user_id` INT UNSIGNED NOT NULL,
+    `project_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`user_id`, `project_id`),
+    CONSTRAINT `fk_user_project_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `User` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_user_project_project`
+    FOREIGN KEY (`project_id`)
+    REFERENCES `Project` (`project_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    ) ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `UserEvent`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `UserEvent` ;
+CREATE TABLE IF NOT EXISTS `UserEvent` (
+    `user_id` INT UNSIGNED NOT NULL,
+    `event_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`user_id`, `event_id`),
+    CONSTRAINT `fk_user_event_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `User` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_user_event_event`
+    FOREIGN KEY (`event_id`)
+    REFERENCES `Event` (`event_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    ) ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `UserTask`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `UserTask` ;
+CREATE TABLE IF NOT EXISTS `UserTask` (
+    `user_id` INT UNSIGNED NOT NULL,
+    `task_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`user_id`, `task_id`),
+    CONSTRAINT `fk_user_task_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `User` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_user_task_task`
+    FOREIGN KEY (`task_id`)
+    REFERENCES `Task` (`task_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    ) ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `UserList`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `UserList` ;
+CREATE TABLE IF NOT EXISTS `UserList` (
+    `user_id` INT UNSIGNED NOT NULL,
+    `list_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`user_id`, `list_id`),
+    CONSTRAINT `fk_user_list_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `User` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_user_list_list`
+    FOREIGN KEY (`list_id`)
+    REFERENCES `List` (`list_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    ) ENGINE = InnoDB;
+
+
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

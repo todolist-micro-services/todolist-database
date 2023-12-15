@@ -1,6 +1,7 @@
 package todolist.database.dataType;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class Project {
 
@@ -10,6 +11,14 @@ public class Project {
         this.description = description;
         this.creationDate = creationDate;
         this.creator = creator;
+    }
+
+    public Project(Map<String, String> data) {
+        this.projectId = Integer.parseInt(data.get("project_id"));
+        this.name = data.get("name");
+        this.description = data.get("description");
+        this.creationDate = LocalDateTime.parse(data.get("creation_date").replace(" ", "T"));
+        this.creator = new User(Integer.parseInt(data.get("creator")), "", "", "", "");
     }
 
     public int projectId;
