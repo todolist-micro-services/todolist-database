@@ -235,7 +235,7 @@ public class Mysql implements DataInterface {
 
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.CREATE_PROJECT.getSqlTemplate(), Arrays.asList(project.name, project.description, project.creationDate.toString(), project.creator));
+            result = this.updateData(connection, SqlOperation.CREATE_PROJECT.getSqlTemplate(), Arrays.asList(project.name, project.description, project.creationDate.toString(), project.creator.userId));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -249,7 +249,7 @@ public class Mysql implements DataInterface {
 
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.UPDATE_PROJECT.getSqlTemplate(), Arrays.asList(project.name, project.description, project.creationDate.toString(), project.creator, project.projectId));
+            result = this.updateData(connection, SqlOperation.UPDATE_PROJECT.getSqlTemplate(), Arrays.asList(project.name, project.description, project.creationDate.toString(), project.creator.userId, project.projectId));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -301,6 +301,42 @@ public class Mysql implements DataInterface {
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
             data =  this.retrieveData(connection, SqlOperation.RETRIEVE_ONE_USER_PROJECT.getSqlTemplate(), Arrays.asList(userId, projectId));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if ((data.size() == 1 && data.getFirst().containsKey("Error")) || data.isEmpty()) {
+            return null;
+        }
+        return new Project(data.getFirst());
+    }
+
+    @Override
+    public Project retrieveProjectById(int projectId) {
+        List<Map<String, String>> data = new ArrayList<>();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            data =  this.retrieveData(connection, SqlOperation.RETRIEVE_PROJECT_BY_ID.getSqlTemplate(), Arrays.asList(projectId));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if ((data.size() == 1 && data.getFirst().containsKey("Error")) || data.isEmpty()) {
+            return null;
+        }
+        return new Project(data.getFirst());
+    }
+
+    @Override
+    public Project retrieveUserProjectByName(int userId, String name) {
+        List<Map<String, String>> data = new ArrayList<>();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            data =  this.retrieveData(connection, SqlOperation.RETRIEVE_USER_PROJECT_BY_NAME.getSqlTemplate(), Arrays.asList(userId, name));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -19,6 +19,8 @@ public interface DataInterface {
     public String deleteProject(int projectId);
     public java.util.List<Project> retrieveAllUserProjects(int userId);
     public Project retrieveOneUserProject(int userId, int projectId);
+    public Project retrieveProjectById(int projectId);
+    public Project retrieveUserProjectByName(int userId, String name);
     public String createProjectEvent(Event event);
     public String updateProjectEvent(Event event);
     public String deleteProjectEvent(int eventId);
