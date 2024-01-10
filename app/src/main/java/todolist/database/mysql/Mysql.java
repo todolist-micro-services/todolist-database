@@ -349,96 +349,12 @@ public class Mysql implements DataInterface {
     }
 
     @Override
-    public String createProjectEvent(Event event) {
-        String result;
-
-        try {
-            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.CREATE_PROJECT_EVENT.getSqlTemplate(), Arrays.asList(event.name, event.description, event.startDateTime.toString(), event.endDateTime.toString(), event.creator));
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
-        return result;
-    }
-
-    @Override
-    public String updateProjectEvent(Event event) {
-        String result;
-
-        try {
-            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.UPDATE_PROJECT_EVENT.getSqlTemplate(), Arrays.asList(event.name, event.description, event.startDateTime.toString(), event.endDateTime.toString(), event.creator, event.eventId));
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
-        return result;
-    }
-
-    @Override
-    public String deleteProjectEvent(int eventId) {
-        String result;
-
-        try {
-            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.CREATE_USER.getSqlTemplate(), Arrays.asList(eventId));
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
-        return result;
-    }
-
-    @Override
-    public Event retrieveOneProjectEvent(int projectId, int eventId) {
-        List<Map<String, String>> data = new ArrayList<>();
-
-        try {
-            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            data =  this.retrieveData(connection, SqlOperation.RETRIEVE_ONE_PROJECT_EVENT.getSqlTemplate(), Arrays.asList(eventId, projectId));
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        if ((data.size() == 1 && data.getFirst().containsKey("Error")) || data.isEmpty()) {
-            return null;
-        }
-        return new Event(data.getFirst());
-    }
-    @Override
-
-    public List<Event> retrieveAllProjectEvents(int projectId) {
-        List<Map<String, String>> data = new ArrayList<>();
-        List<Event> events = new ArrayList<>();
-
-        try {
-            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            data =  this.retrieveData(connection, SqlOperation.RETRIEVE_ALL_PROJECTS_EVENTS.getSqlTemplate(), Arrays.asList(projectId));
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        if ((data.size() == 1 && data.getFirst().containsKey("Error")) || data.isEmpty()) {
-            return null;
-        }
-        for (int i = 0; i != data.size(); ++i)
-            events.add(new Event(data.get(i)));
-        return events;
-    }
-
-    @Override
     public String createProjectList(todolist.database.dataType.List list) {
         String result;
 
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.CREATE_PROJECT_LIST.getSqlTemplate(), Arrays.asList(list.name, list.description, list.parent, list.creator, list.project));
+            result = this.updateData(connection, SqlOperation.CREATE_PROJECT_LIST.getSqlTemplate(), Arrays.asList(list.name, list.description, list.parent != null ? list.parent.listId : null, list.creator.userId, list.project.projectId));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -453,7 +369,7 @@ public class Mysql implements DataInterface {
 
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.UPDATE_PROJECT_LIST.getSqlTemplate(), Arrays.asList(list.name, list.description, list.parent, list.creator, list.project, list.listId));
+            result = this.updateData(connection, SqlOperation.UPDATE_PROJECT_LIST.getSqlTemplate(), Arrays.asList(list.name, list.description, list.parent != null ? list.parent.listId : null, list.creator.userId, list.project.projectId, list.listId));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -496,7 +412,42 @@ public class Mysql implements DataInterface {
     }
 
     @Override
-    public List<todolist.database.dataType.List> allProjectLists(int projectId) {
+    public todolist.database.dataType.List retrieveProjectListByName(int projectId, String name) {
+        List<Map<String, String>> data = new ArrayList<>();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            data =  this.retrieveData(connection, SqlOperation.RETRIEVE_PROJECT_LIST_BY_NAME.getSqlTemplate(), Arrays.asList(name, projectId));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if ((data.size() == 1 && data.getFirst().containsKey("Error")) || data.isEmpty()) {
+            return null;
+        }
+        return new todolist.database.dataType.List(data.getFirst());
+    }
+    @Override
+    public Task retrieveListTaskByName(int list, String name) {
+        List<Map<String, String>> data = new ArrayList<>();
+
+        try {
+            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
+            data =  this.retrieveData(connection, SqlOperation.RETRIEVE_LIST_TASK_BY_NAME.getSqlTemplate(), Arrays.asList(name, list));
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if ((data.size() == 1 && data.getFirst().containsKey("Error")) || data.isEmpty()) {
+            return null;
+        }
+        return new Task(data.getFirst());
+    }
+
+    @Override
+    public List<todolist.database.dataType.List> retrieveAllProjectLists(int projectId) {
         List<Map<String, String>> data = new ArrayList<>();
         List<todolist.database.dataType.List> lists = new ArrayList<>();
 
@@ -522,7 +473,7 @@ public class Mysql implements DataInterface {
 
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.CREATE_LIST_TASK.getSqlTemplate(), Arrays.asList(task.name, task.description, task.creationDateTime.toString(), task.list, task.creator));
+            result = this.updateData(connection, SqlOperation.CREATE_LIST_TASK.getSqlTemplate(), Arrays.asList(task.name, task.description, task.creationDateTime.toString(), task.creator.userId, task.list.listId));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -537,7 +488,7 @@ public class Mysql implements DataInterface {
 
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.UPDATE_LIST_TASK.getSqlTemplate(), Arrays.asList(task.name, task.description, task.creationDateTime.toString(), task.list, task.creator, task.taskId));
+            result = this.updateData(connection, SqlOperation.UPDATE_LIST_TASK.getSqlTemplate(), Arrays.asList(task.name, task.description, task.creationDateTime.toString(), task.creator.userId, task.list.listId, task.taskId));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -652,36 +603,6 @@ public class Mysql implements DataInterface {
     }
 
     @Override
-    public String linkUserToEvent(int userId, int eventId) {
-        String result;
-
-        try {
-            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.LINK_USER_TO_EVENT.getSqlTemplate(), Arrays.asList(userId, eventId));
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
-        return result;
-    }
-
-    @Override
-    public String unLinkUserToEvent(int userId, int eventId) {
-        String result;
-
-        try {
-            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            result = this.updateData(connection, SqlOperation.UNLINK_USER_TO_EVENT.getSqlTemplate(), Arrays.asList(userId, eventId));
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
-        return result;
-    }
-
-    @Override
     public String linkUserToList(int userId, int listId) {
         String result;
 
@@ -770,27 +691,6 @@ public class Mysql implements DataInterface {
         try {
             Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
             data = this.retrieveData(connection, SqlOperation.RETRIEVE_ALL_USER_LINK_TO_LIST.getSqlTemplate(), Arrays.asList(listId));
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        if ((data.size() == 1 && data.getFirst().containsKey("Error")) || data.isEmpty()) {
-            return null;
-        }
-        for (int i = 0; i != data.size(); ++i)
-            users.add(new User(data.get(i)));
-        return users;
-    }
-
-    @Override
-    public List<User> retrieveAllUserLinkToEvent(int eventId) {
-        List<Map<String, String>> data = new ArrayList<>();
-        List<User> users = new ArrayList<>();
-
-        try {
-            Connection connection = DriverManager.getConnection(this.databaseUrl, this.databaseUser, this.databasePassword);
-            data = this.retrieveData(connection, SqlOperation.RETRIEVE_ALL_USER_LINK_TO_EVENT.getSqlTemplate(), Arrays.asList(eventId));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -107,34 +107,6 @@ CREATE TABLE IF NOT EXISTS `List` (
 
 
 -- -----------------------------------------------------
--- Table `Event`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Event` ;
-
-CREATE TABLE IF NOT EXISTS `Event` (
-    `event_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `start_date` DATETIME NOT NULL,
-    `end_date` DATETIME NOT NULL,
-    `creator` INT UNSIGNED NULL,
-    `project` INT UNSIGNED NOT NULL,
-    PRIMARY KEY (`event_id`),
-    UNIQUE INDEX `event_id_UNIQUE` (`event_id` ASC) VISIBLE,
-    CONSTRAINT `fk_event_creator`
-    FOREIGN KEY (`creator`)
-    REFERENCES `User` (`user_id`)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE,
-    CONSTRAINT `fk_event_project`
-    FOREIGN KEY (`project`)
-    REFERENCES `Project` (`project_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `Task`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `Task` ;
@@ -177,27 +149,6 @@ CREATE TABLE IF NOT EXISTS `UserProject` (
     CONSTRAINT `fk_user_project_project`
     FOREIGN KEY (`project_id`)
     REFERENCES `Project` (`project_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-    ) ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `UserEvent`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `UserEvent` ;
-CREATE TABLE IF NOT EXISTS `UserEvent` (
-    `user_id` INT UNSIGNED NOT NULL,
-    `event_id` INT UNSIGNED NOT NULL,
-    PRIMARY KEY (`user_id`, `event_id`),
-    CONSTRAINT `fk_user_event_user`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `User` (`user_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-    CONSTRAINT `fk_user_event_event`
-    FOREIGN KEY (`event_id`)
-    REFERENCES `Event` (`event_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE
     ) ENGINE = InnoDB;

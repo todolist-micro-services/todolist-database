@@ -21,16 +21,13 @@ public interface DataInterface {
     public Project retrieveOneUserProject(int userId, int projectId);
     public Project retrieveProjectById(int projectId);
     public Project retrieveUserProjectByName(int userId, String name);
-    public String createProjectEvent(Event event);
-    public String updateProjectEvent(Event event);
-    public String deleteProjectEvent(int eventId);
-    public Event retrieveOneProjectEvent(int projectId, int eventId);
-    public java.util.List<Event> retrieveAllProjectEvents(int projectId);
+    public List retrieveProjectListByName(int projectId, String name);
+    public Task retrieveListTaskByName(int list, String name);
     public String createProjectList(List list);
     public String updateProjectList(List list);
     public String deleteProjectList(int listId);
     public List retrieveOneProjectList(int projectId, int listId);
-    public java.util.List<List> allProjectLists(int projectId);
+    public java.util.List<List> retrieveAllProjectLists(int projectId);
     public String createListTask(Task task);
     public String updateListTask(Task task);
     public String deleteListTask(int taskId);
@@ -39,14 +36,11 @@ public interface DataInterface {
     public java.util.List<Task> retrieveAllProjectTasks(int projectId);
     public String linkUserToProject(int userId, int projectId);
     public String unLinkUserToProject(int userId, int projectId);
-    public String linkUserToEvent(int userId, int eventId);
-    public String unLinkUserToEvent(int userId, int eventId);
     public String linkUserToList(int userId, int listId);
     public String unLinkUserToList(int userId, int listId);
     public String linkUserToTask(int userId, int taskId);
     public String unLinkUserToTask(int userId, int taskId);
     public java.util.List<User> retrieveAllUserLinkToTask(int taskId);
     public java.util.List<User> retrieveAllUserLinkToList(int listId);
-    public java.util.List<User> retrieveAllUserLinkToEvent(int eventId);
     public java.util.List<User> retrieveAllUserLinkToProject(int projectId);
 }

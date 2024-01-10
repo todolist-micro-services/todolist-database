@@ -1,5 +1,6 @@
 package todolist.database;
 
+import todolist.database.dataType.List;
 import todolist.database.dataType.Project;
 import todolist.database.dataType.User;
 import todolist.database.mysql.Mysql;
@@ -30,7 +31,7 @@ public class App {
         }
         DataInterface dataInterface = new Mysql(System.getProperty("DATABASE_URL"), System.getProperty("DATABASE_USER"), System.getProperty("DATABASE_PASSWORD"));
 
-        System.out.println(dataInterface.retrieveUserProjectByName(1, "Project Postman").projectId);
+        System.out.println(dataInterface.retrieveListTaskByName(2, "Test"));
 
 //        System.out.println(dataInterface.getUserToken(16).isActivated);
 //        System.out.println(dataInterface.getUserToken(18).isActivated);
