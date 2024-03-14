@@ -16,22 +16,10 @@ public class App {
     }
 
     public static void main(String[] args) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("/Users/pad/delivery/todoList/todolist-database/.env"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("=");
-                if (System.getProperties().containsKey(parts[0])) {
-                    System.getProperties().setProperty(parts[0], parts[1]);
-                } else {
-                    System.setProperty(parts[0], parts[1]);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        DataInterface dataInterface = new Mysql(System.getProperty("DATABASE_URL"), System.getProperty("DATABASE_USER"), System.getProperty("DATABASE_PASSWORD"));
+        DataInterface dataInterface = new Mysql(System.getenv("DB_URL"), System.getenv("DB_USERNAME"), System.getenv("DB_PASSWORD"));
 
-        System.out.println(dataInterface.retrieveListTaskByName(2, "Test"));
+        System.out.println(dataInterface.linkUserToProject(21, 24));
+        //System.out.println(dataInterface.retrieveAllUserProjects(21).get(0).name);
 
 //        System.out.println(dataInterface.getUserToken(16).isActivated);
 //        System.out.println(dataInterface.getUserToken(18).isActivated);
